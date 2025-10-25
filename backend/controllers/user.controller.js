@@ -34,7 +34,7 @@ export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    
+    // ✅ Basic validation
     if (!username || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
@@ -50,7 +50,6 @@ export const register = async (req, res) => {
       });
     }
 
-
     const cleanUsername = username.trim().toLowerCase();
     if (cleanUsername.length < 3 || cleanUsername.length > 20) {
       return res.status(400).json({
@@ -59,7 +58,6 @@ export const register = async (req, res) => {
       });
     }
 
- 
     const strongPasswordRegex =
       /^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
     if (!strongPasswordRegex.test(password)) {
@@ -70,29 +68,28 @@ export const register = async (req, res) => {
       });
     }
 
-    const existingUsername = await User.findOne({ username: cleanUsername });
-    if (existingUsername) {
+    // ✅ Check for existing users
+    if (await User.findOne({ username: cleanUsername })) {
       return res.status(409).json({
         message: "Username already taken",
         success: false,
       });
     }
-
-    const existingEmail = await User.findOne({ email });
-    if (existingEmail) {
+    if (await User.findOne({ email })) {
       return res.status(401).json({
-        message: "Invalid credentials", // Don't expose that the email exists
+        message: "Invalid credentials",
         success: false,
       });
     }
 
-
+    // ✅ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
- 
+    // ✅ Create verification token
     const verificationToken = crypto.randomBytes(32).toString("hex");
-    const tokenExpiry = Date.now() + 60 * 60 * 1000; // 1 hour expiry
+    const tokenExpiry = Date.now() + 60 * 60 * 1000; // 1 hour
 
+    // ✅ Create user
     const newUser = await User.create({
       username: cleanUsername,
       email,
@@ -102,54 +99,51 @@ export const register = async (req, res) => {
       verificationTokenExpires: tokenExpiry,
     });
 
-    
+    // ✅ Prepare email transporter
     const transporter = nodemailer.createTransport({
-      service: "gmail", // you can use others like SendGrid, Mailgun, etc.
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-      const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
 
-   try {
-     await transporter.sendMail({
-  from: `"Xvent Support" <${process.env.EMAIL_USER}>`,
-  to: email,
-  subject: "Verify your account",
-  text: `Welcome, ${cleanUsername}! Verify your email here: ${verificationLink}`,
-      html: `
-         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
-    <h2 style="color: #333;">Welcome, ${cleanUsername}!</h2>
-    <p style="color: #555; font-size: 16px;">
-      Thanks for signing up. Please verify your email address to activate your account.
-    </p>
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="${verificationLink}" 
-        style="background-color: #007bff; color: #fff; padding: 12px 25px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block;">
-        Verify Email
-      </a>
-    </div>
-    <p style="color: #999; font-size: 14px;">
-      If you did not create an account, please ignore this email.
-    </p>
-    <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-    <p style="color: #aaa; font-size: 12px; text-align: center;">
-      © 2025 YourAppName. All rights reserved.
-    </p>
-  </div>
-      `,
-    });
+    // ✅ Send email asynchronously (non-blocking)
+    transporter
+      .sendMail({
+        from: `"Xvent Support" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Verify your account",
+        text: `Welcome, ${cleanUsername}! Verify your email: ${verificationLink}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+            <h2 style="color: #333;">Welcome, ${cleanUsername}!</h2>
+            <p style="color: #555; font-size: 16px;">
+              Thanks for signing up. Please verify your email to activate your account.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationLink}" 
+                style="background-color: #007bff; color: #fff; padding: 12px 25px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block;">
+                Verify Email
+              </a>
+            </div>
+            <p style="color: #999; font-size: 14px;">
+              If you did not create an account, ignore this email.
+            </p>
+          </div>
+        `,
+      })
+      .then(() => console.log(`Verification email sent to ${email}`))
+      .catch((err) => console.error("Email sending failed:", err));
 
+    // ✅ Respond immediately to frontend
     return res.status(201).json({
       message:
         "Account created successfully. Please check your email to verify your account.",
       success: true,
     });
-   } catch (mailError) {
-    console.error("Email sending error:", mailError);
-   }
   } catch (error) {
     console.error("Registration Error:", error);
     return res.status(500).json({
@@ -158,6 +152,7 @@ export const register = async (req, res) => {
     });
   }
 };
+
 
 
 export const verifyEmail = async (req, res) => {
