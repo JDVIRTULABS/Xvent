@@ -1,6 +1,5 @@
 import React from "react";
 import "./Footer.css";
-import XventLogo from "../../assets/HomePageUtils/XventLogo.png";
 import facebookLogo from "../../assets/HomePageUtils/facebookLogo.png";
 import instagramLogo from "../../assets/HomePageUtils/instagramLogo.png";
 import xLogo from "../../assets/HomePageUtils/xLogo.png";
@@ -42,7 +41,7 @@ const Footer = () => {
     <footer id="FooterContainer">
       <div className="FooterMainLogo">
         <Link to="/">
-        <img src={XventLogo} alt="Xvent Logo" />
+        <img src="/Xvent" alt="Xvent Logo" />
         </Link>
       </div>
       <div className="FooterInfo">
