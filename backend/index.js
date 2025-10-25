@@ -18,6 +18,7 @@ connectDB();
 // Allowed origins
 const allowedOrigins = [
   "https://www.xvent.in",
+  "https://xvent.in",
   "http://localhost:5173",
   "http://localhost:5174",
 ];
