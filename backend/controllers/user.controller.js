@@ -113,7 +113,8 @@ export const register = async (req, res) => {
 
       const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
 
-    await transporter.sendMail({
+   try {
+     await transporter.sendMail({
   from: `"Xvent Support" <${process.env.EMAIL_USER}>`,
   to: email,
   subject: "Verify your account",
@@ -146,6 +147,9 @@ export const register = async (req, res) => {
         "Account created successfully. Please check your email to verify your account.",
       success: true,
     });
+   } catch (mailError) {
+    console.error("Email sending error:", mailError);
+   }
   } catch (error) {
     console.error("Registration Error:", error);
     return res.status(500).json({
