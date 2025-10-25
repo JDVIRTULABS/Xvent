@@ -5,53 +5,60 @@ import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js";
 import postRoute from "./routes/post.route.js";
-import eventRoute from "./routes/event.route.js"
-// import messageRoute from "./routes/message.route.js";
+import eventRoute from "./routes/event.route.js";
 
-dotenv.config({});
+dotenv.config();
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
-console.log(PORT);
 
-app.get("/", (req, res) => {
-  return res.status(200).json({
-    message: "I'm running from server side",
-    suceess: true,
-  });
-});
+// Database connection
+connectDB();
 
-// middlewares
+// Allowed origins
+const allowedOrigins = [
+  "https://www.xvent.in",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
-const corsOption = {
-  origin: ["https://www.xvent.in","http://localhost:5173", "http://localhost:5174"], // allow both
-  credentials: true, // lowercase + required
-};
 
-
-// Handle preflight OPTIONS requests
-app.options("*", cors({
-  origin: allowedOrigins,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+// CORS setup
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin like mobile apps or curl requests
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
 }));
 
-app.use(cors(corsOption));
+// Handle preflight requests
+app.options("*", cors());
 
-
-
-// api routes
-
+// Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/event", eventRoute);
-// app.use("/api/v1/message", messageRoute);
-// "https://xvent.onrender.com/api/v1/user"
 
+// Root endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "I'm running from server side",
+    success: true,
+  });
+});
+
+// Start server
 app.listen(PORT, () => {
-  connectDB();
-  console.log(`port is running on ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
