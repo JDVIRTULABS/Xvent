@@ -42,6 +42,13 @@ app.use(cors({
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
 }));
 
+
+// Skip HTTPS redirect for OPTIONS requests (preflight)
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") return next(); // allow preflight to pass
+  next();
+});
+
 // Handle preflight requests
 app.options("*", cors());
 
