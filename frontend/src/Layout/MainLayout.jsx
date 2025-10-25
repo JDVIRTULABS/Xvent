@@ -6,6 +6,7 @@ import NavbarLoggedIn from "../components/Navbar/NavbarLoggedIn";
 import { MapPin } from "lucide-react";
 import axios from "axios";
 import HeaderProfileMenu from "../components/HeaderProfileMenu";
+import Footer from "../pages/HomePage/Footer";
 
 
 const MainLayout = () => {
@@ -19,11 +20,12 @@ const MainLayout = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   // Redirect to dashboard if logged in
-  useEffect(() => {
-    if (!loading && currentUser && location.pathname === "/") {
-      navigate("/dashboard");
-    }
-  }, [loading, currentUser, location, navigate]);
+useEffect(() => {
+  if (!loading && currentUser && location.pathname === "/") {
+    navigate("/dashboard");
+  }
+}, [loading, currentUser, location, navigate]);
+
 
   // Fetch events
   useEffect(() => {
@@ -66,18 +68,25 @@ const MainLayout = () => {
     );
   }, []);
 
-  if (!currentUser) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <NavbarDesktop />
-        <div className="max-w-6xl mx-auto p-6">
-          <div className="bg-white rounded-lg shadow-sm min-h-96">
-            <Outlet />
-          </div>
+ if (!currentUser) {
+  return (
+    <div className="flex flex-col min-h-screen bg-[#FAF9F2]">
+      {/* Navbar */}
+      <NavbarDesktop />
+
+      {/* Main content */}
+      <main className="flex-grow max-w-6xl mx-auto p-6 w-full">
+        <div className="bg-[#FAF9F2] rounded-lg shadow-sm min-h-[24rem]">
+          <Outlet />
         </div>
-      </div>
-    );
-  }
+      </main>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+}
+
 
   return (
     <div className="min-h-screen bg-[#FAF9F2]">

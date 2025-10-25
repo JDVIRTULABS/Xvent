@@ -116,6 +116,26 @@ export const getAllEvents = async (req, res) => {
 };
 
 
+// Get all events (publicly accessible)
+// controllers/event.controller.js
+
+export const getAllEventsForPublic = async (req, res) => {
+  try {
+    const events = await Event.find()
+      .sort({ createdAt: -1 })
+      .populate({ path: "author", select: "username profilePicture" })
+      .populate({ path: "comments.user", select: "username profilePicture" })
+      .populate({ path: "comments.replies.user", select: "username profilePicture" });
+
+    return res.status(200).json({ success: true, events });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+
 // Get events by logged-in user
 export const getUserEvents = async (req, res) => {
   try {

@@ -15,6 +15,7 @@ import {
   getRecommendedEvents,
   updateEvent,
   addReplyToComment,
+  getAllEventsForPublic,
   // addReplyToComment,
 } from "../controllers/event.controller.js";
 
@@ -23,6 +24,7 @@ const router = express.Router();
 
 router.route("/add").post(isAuthenticated, upload.single("image"), addNewEvent);
 router.route("/all").get(isAuthenticated, getAllEvents);
+router.route("/public").get( getAllEventsForPublic);
 router.route("/userevent/all").get(isAuthenticated, getUserEvents);
 
 router.route("/:id/update").put(isAuthenticated, upload.single("image"), updateEvent);
