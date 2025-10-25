@@ -22,9 +22,9 @@ const toast = {
   error: (msg) => console.error(msg),
   success: (msg) => console.log(msg),
 };
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: `${BACKEND_URL}/api/v1`,
   withCredentials: true,
 });
 
@@ -558,11 +558,20 @@ const DiscoverEvents = () => {
                 >
                   {/* User Header */}
                   <div className="p-3 sm:p-4 pb-3 flex items-center gap-2 sm:gap-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                   {event.author?.profilePicture ? (
+                   <img
+                        src={event.author?.profilePicture}
+                        alt={event.author?.username || "Event Image"}
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                      /> 
+                  ) :(
+                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                       {(event.authorUsername ||
                         event.organizer ||
                         "U")[0].toUpperCase()}
-                    </div>
+                        </div>
+                    
+                   )}
                     <div className="min-w-0 flex-1">
                       <h3 className="font-semibold text-gray-800 text-sm sm:text-base truncate">
                         {event.authorUsername || event.organizer || "UserName"}

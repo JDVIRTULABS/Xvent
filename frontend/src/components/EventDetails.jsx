@@ -21,7 +21,7 @@ const EventDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const navigate = useNavigate();
-
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     fetchEvent();
     if (currentUser) checkBookmark();
@@ -31,7 +31,7 @@ const EventDetails = () => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `http://localhost:8000/api/v1/event/${id}`,
+        `${BACKEND_URL}/api/v1/event/${id}`,
         {
           withCredentials: true,
         }
@@ -48,7 +48,7 @@ const EventDetails = () => {
   const checkBookmark = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8000/api/v1/user/bookmarks",
+        `${BACKEND_URL}/api/v1/user/bookmarks`,
         {
           withCredentials: true,
         }
@@ -64,7 +64,7 @@ const EventDetails = () => {
 
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/api/v1/event/bookmark/${id}`,
+        `${BACKEND_URL}/api/v1/event/bookmark/${id}`,
         {},
         { withCredentials: true }
       );

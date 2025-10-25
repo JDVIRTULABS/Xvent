@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Send, ChevronDown, ChevronUp } from "lucide-react";
 import axios from "axios";
+import DefaultLogo from "../Profile/DefaultLogo";
 
 // Toast fallback
 const toast = {
   error: (msg) => console.error(msg),
   success: (msg) => console.log(msg),
 };
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // Axios instance
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: `${BACKEND_URL}/api/v1`,
   withCredentials: true,
 });
 
@@ -50,9 +51,7 @@ const CommentWithReplies = ({ comment, eventId, level = 0, updateComments }) => 
             className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover flex-shrink-0"
           />
         ) : (
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-xs text-white font-semibold flex-shrink-0">
-            {comment.user?.username?.[0]?.toUpperCase() || "?"}
-          </div>
+          <DefaultLogo user={comment.user} />
         )}
 
         <div className="flex-1 min-w-0">

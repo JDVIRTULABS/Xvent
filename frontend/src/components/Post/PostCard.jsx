@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Heart, MessageCircle, Share2, Send, MoreVertical, ChevronDown, ChevronUp, X } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
+import FollowButton from "../../Profile/FollowButton";
+import DefaultLogo from "../../Profile/DefaultLogo";
 
 const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleShare, onCommentAdded }) => {
   const [showComments, setShowComments] = useState(false);
@@ -10,6 +12,9 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
   const [postComments, setPostComments] = useState(post.comments || []);
 
   const isLiked = currentUserId && post.likes.some((id) => String(id) === String(currentUserId));
+
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleComment = async (parentCommentId = null) => {
     const inputKey = parentCommentId || 'main';
@@ -23,7 +28,7 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
       if (parentCommentId) payload.parentCommentId = parentCommentId;
       
       const { data } = await axios.post(
-        `http://localhost:8000/api/v1/post/${post._id}/comment`,
+        `${BACKEND_URL}/api/v1/post/${post._id}/comment`,
         payload,
         { withCredentials: true }
       );
@@ -79,11 +84,12 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
     return (
       <div className={`${level > 0 ? 'ml-6 sm:ml-10 mt-3' : 'mt-3'}`}>
         <div className="flex gap-2 sm:gap-3">
+          {comment.author?.profilePicture ? (
           <img
             src={comment.author?.profilePicture || "/default-profile.png"}
             alt={comment.author?.username}
             className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover flex-shrink-0"
-          />
+          />) : (<DefaultLogo user={comment.author} />)}
           <div className="flex-1 min-w-0">
             <div className="bg-[#F0EFE9] rounded-2xl px-3 py-2">
               <div className="flex items-center gap-2 flex-wrap">
@@ -96,6 +102,7 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
                     day: 'numeric'
                   })}
                 </span>
+                
               </div>
               <p className="text-xs sm:text-sm text-gray-800 mt-1 break-words">{comment.text}</p>
             </div>
@@ -166,11 +173,13 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
       {/* Post Header */}
       <div className="p-3 sm:p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
+          {post.author?.profilePicture ? (
           <img
-            src={post.author?.profilePicture || "/default-profile.png"}
+            src={post.author?.profilePicture }
             alt={post.author?.username}
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover"
           />
+          ) :(<DefaultLogo  user={post.author}/>)}
           <div>
             <h3 className="font-semibold text-gray-900 text-sm">
               {post.author?.username || "Unknown"}
@@ -184,9 +193,9 @@ const PostCard = ({ post, currentUserId, currentUser, handleLikeToggle, handleSh
             </p>
           </div>
         </div>
-        <button className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition">
-          <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
+              {post.author?._id && (
+             <FollowButton userId={post.author._id} />
+           )}
       </div>
 
       {/* Post Caption */}

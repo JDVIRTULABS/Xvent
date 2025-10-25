@@ -7,6 +7,7 @@ export default function SettingsPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [form, setForm] = useState({
     username: "",
     bio: "",
@@ -15,7 +16,7 @@ export default function SettingsPage() {
   const [file, setFile] = useState(null);
 
   const API =
-    import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1/user";
+    import.meta.env.VITE_API_URL || `${BACKEND_URL}/api/v1/user`;
 
   // Fetch profile
   useEffect(() => {

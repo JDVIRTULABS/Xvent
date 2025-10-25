@@ -17,9 +17,11 @@ const NavbarLoggedIn = () => {
   const navigate = useNavigate();
   const location = useLocation(); 
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:8000/api/v1/user/logout", { withCredentials: true });
+      await axios.get(`${BACKEND_URL}/api/v1/user/logout`, { withCredentials: true });
       setCurrentUser(null);
       navigate("/signin");
     } catch (error) {

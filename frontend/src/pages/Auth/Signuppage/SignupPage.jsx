@@ -12,7 +12,7 @@ const SignupPage = () => {
   const [input, setInput] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [backendErrors, setBackendErrors] = useState({ username: "", email: "", password: "" });
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
     setBackendErrors({ ...backendErrors, [e.target.name]: "" });
@@ -34,7 +34,7 @@ const SignupPage = () => {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
+        `${BACKEND_URL}/api/v1/user/register`,
         {
           username: input.username.trim(),
           email: input.email.trim(),

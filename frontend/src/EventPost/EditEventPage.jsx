@@ -3,8 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: `${BACKEND_URL}/api/v1`,
   withCredentials: true,
 });
 

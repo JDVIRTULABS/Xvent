@@ -22,9 +22,9 @@ const toast = {
   error: (msg) => console.error(msg),
   success: (msg) => console.log(msg),
 };
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: `${BACKEND_URL}/api/v1`,
   withCredentials: true,
 });
 
@@ -135,55 +135,6 @@ const EventsPage = () => {
       fetchRecommendedEvents();
     }
   };
-
-
-   // Set followedUsers on page load / when currentUser changes
-  useEffect(() => {
-    const fetchFollowedUsers = async () => {
-      if (!currentUser?._id) return;
-      try {
-        const res = await api.get(`/user/${currentUser._id}/following`);
-        if (res.data.success) {
-          // res.data.following should be an array of user IDs
-          setFollowedUsers(res.data.following);
-        }
-      } catch (err) {
-        console.error("Failed to fetch followed users:", err);
-      }
-    };
-    fetchFollowedUsers();
-  }, [currentUser]);
-
-  const handleFollowToggle = async (userId) => {
-    if (!currentUser?._id) return toast.error("Please login to follow users");
-
-    const isFollowing = followedUsers.includes(userId);
-
-    // Optimistic update
-    setFollowedUsers((prev) =>
-      isFollowing ? prev.filter((id) => id !== userId) : [...prev, userId]
-    );
-
-    try {
-      const res = await api.post(`/user/${userId}/follow`);
-      if (!res.data.success) {
-        // Revert optimistic update if backend fails
-        setFollowedUsers((prev) =>
-          isFollowing ? [...prev, userId] : prev.filter((id) => id !== userId)
-        );
-        toast.error(res.data.message || "Failed to update follow status");
-      } else {
-        toast.success(res.data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      setFollowedUsers((prev) =>
-        isFollowing ? [...prev, userId] : prev.filter((id) => id !== userId)
-      );
-      toast.error(err.response?.data?.message || "Failed to update follow status");
-    }
-  };
-
 
 
   // Handle bookmarks
@@ -622,20 +573,19 @@ const EventsPage = () => {
                       </h3>
                     </div>
                      <div className="ml-auto">
-                      {authorId && authorId !== currentUserId && (
-                        <button
-                          onClick={() => handleFollowToggle(authorId)}
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                            followedUsers.includes(authorId)
-                              ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                              : "bg-blue-500 text-white hover:bg-blue-600"
-                          }`}
-                        >
-                          {followedUsers.includes(authorId)
-                            ? "Unfollow"
-                            : "Follow"}
-                        </button>
-                      )}
+                     {authorId && authorId !== currentUserId && (
+  <button
+    onClick={() => handleFollowToggle(authorId)}
+    className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+      followedUsers.includes(authorId)
+        ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    }`}
+  >
+    {followedUsers.includes(authorId) ? "Unfollow" : "Follow"}
+  </button>
+)}
+
                     </div>
                   </div>
 

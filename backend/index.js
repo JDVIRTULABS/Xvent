@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 const corsOption = {
-  origin: ["http://localhost:5173", "http://localhost:5174","https://xventapp.netlify.app/"], // allow both
+  origin: ["https://www.xvent.in","http://localhost:5173", "http://localhost:5174","https://xventapp.netlify.app/"], // allow both
   credentials: true, // lowercase + required
 };
 app.use(cors(corsOption));

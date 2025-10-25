@@ -6,13 +6,13 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
  const storedUser = JSON.parse(localStorage.getItem("user"));
 const [currentUser, setCurrentUser] = useState(storedUser || null);
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/user/me", {
+        const res = await axios.get(`${BACKEND_URL}/api/v1/user/me`, {
           withCredentials: true,
         });
         setCurrentUser(res.data.user);
@@ -29,7 +29,7 @@ const [currentUser, setCurrentUser] = useState(storedUser || null);
 
   const logout = async () => {
     setCurrentUser(null);
-    await axios.get("http://localhost:8000/api/v1/user/logout", {
+    await axios.get(`${BACKEND_URL}/api/v1/user/logout`, {
       withCredentials: true,
     });
   };

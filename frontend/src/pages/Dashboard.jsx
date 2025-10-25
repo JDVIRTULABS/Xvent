@@ -38,7 +38,7 @@ const Dashboard = () => {
   const [registrationLink, setRegistrationLink] = useState("");
   const [eventImage, setEventImage] = useState(null);
   const [eventLoading, setEventLoading] = useState(false);
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -46,7 +46,7 @@ const Dashboard = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:8000/api/v1/post/all", {
+      const { data } = await axios.get(`${BACKEND_URL}/api/v1/post/all`, {
         withCredentials: true,
       });
       setPosts(data.posts || []);
@@ -83,7 +83,7 @@ const Dashboard = () => {
       formData.append("caption", caption);
       formData.append("image", postImage);
 
-      const res = await axios.post("http://localhost:8000/api/v1/post/add", formData, {
+      const res = await axios.post(`${BACKEND_URL}/api/v1/post/add`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -134,7 +134,7 @@ const Dashboard = () => {
       formData.append("registrationLink", registrationLink);
       formData.append("image", eventImage);
 
-      const res = await axios.post("http://localhost:8000/api/v1/event/add", formData, {
+      const res = await axios.post(`${BACKEND_URL}/api/v1/event/add`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -164,7 +164,7 @@ const Dashboard = () => {
         )
       );
       const endpoint = isLiked ? "dislike" : "like";
-      await axios.put(`http://localhost:8000/api/v1/post/${postId}/${endpoint}`, {}, { withCredentials: true });
+      await axios.put(`${BACKEND_URL}/api/v1/post/${postId}/${endpoint}`, {}, { withCredentials: true });
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");

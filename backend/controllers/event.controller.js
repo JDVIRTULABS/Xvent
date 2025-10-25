@@ -19,6 +19,7 @@ export const addNewEvent = async (req, res) => {
       tags,
       registrationLink,
     } = req.body;
+
     const image = req.file;
     const authorId = req.id;
 
@@ -29,11 +30,16 @@ export const addNewEvent = async (req, res) => {
       });
     }
 
+    // ✅ Find the user (author)
     const user = await User.findById(authorId);
-    if (!user)
-      return res.status(404).json({ message: "User not found", success: false });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
 
-    // Optimize image
+    // ✅ Optimize and upload event image
     const optimizedImageBuffer = await sharp(image.buffer)
       .resize({ width: 1200, height: 800, fit: "cover" })
       .toFormat("jpeg", { quality: 80 })
@@ -44,7 +50,7 @@ export const addNewEvent = async (req, res) => {
     )}`;
     const cloudResponse = await cloudinary.uploader.upload(fileUri);
 
-    // Create event
+    // ✅ Create event
     const event = await Event.create({
       title,
       description,
@@ -59,24 +65,34 @@ export const addNewEvent = async (req, res) => {
       image: cloudResponse.secure_url,
       author: user._id,
       authorUsername: user.username,
-      authorProfilePicture: user.profilePicture,
+      authorProfilePicture: user.profilePicture || "", // <-- added fallback
     });
 
+    // ✅ Add event to user's profile
     user.events.push(event._id);
     await user.save();
 
-    await event.populate({ path: "author", select: "username profilePicture" });
+    // ✅ Populate author info before sending response
+    await event.populate({
+      path: "author",
+      select: "username profilePicture",
+    });
 
-    return res.status(201).json({
-      message: "New event created",
+    res.status(201).json({
+      message: "New event created successfully",
       event,
       success: true,
     });
   } catch (error) {
-    console.log("Add New Event Error:", error);
-    res.status(500).json({ message: "Server error", success: false });
+    console.error("Add New Event Error:", error);
+    res.status(500).json({
+      message: "Server error while creating event",
+      error: error.message,
+      success: false,
+    });
   }
 };
+
 
 // Get all events
 export const getAllEvents = async (req, res) => {

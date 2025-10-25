@@ -10,6 +10,8 @@ const AddPost = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
@@ -29,7 +31,7 @@ const AddPost = () => {
       formData.append("image", image);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/post/add",
+        `${BACKEND_URL}/api/v1/post/add`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

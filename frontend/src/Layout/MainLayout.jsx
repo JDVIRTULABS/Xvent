@@ -16,6 +16,8 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   // Redirect to dashboard if logged in
   useEffect(() => {
     if (!loading && currentUser && location.pathname === "/") {
@@ -29,7 +31,7 @@ const MainLayout = () => {
 
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/event/all", {
+        const res = await axios.get(`${BACKEND_URL}/api/v1/event/all`, {
           withCredentials: true,
         });
         setEvents(Array.isArray(res.data.events) ? res.data.events : []);

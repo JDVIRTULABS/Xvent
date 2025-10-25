@@ -10,7 +10,7 @@ const BookmarksPage = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     fetchBookmarks();
   }, [currentUser]);
@@ -19,7 +19,7 @@ const BookmarksPage = () => {
   if (!currentUser?._id) return;
   setLoading(true);
   try {
-    const { data } = await axios.get("http://localhost:8000/api/v1/user/bookmarks", {
+    const { data } = await axios.get(`${BACKEND_URL}/api/v1/user/bookmarks`, {
       withCredentials: true,
     });
     setBookmarks(data.bookmarks || []);
@@ -39,7 +39,7 @@ const BookmarksPage = () => {
   const handleRemoveBookmark = async (id) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/v1/user/bookmark/${id}`,
+        `${BACKEND_URL}/api/v1/user/bookmark/${id}`,
         {},
         { withCredentials: true }
       );

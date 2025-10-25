@@ -6,7 +6,9 @@ import { toast } from "sonner";
 
 const MyPosts = () => {
   const [posts, setPosts] = useState([]);
-
+   
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  
   useEffect(() => {
     fetchMyPosts();
   }, []);
@@ -14,7 +16,7 @@ const MyPosts = () => {
   const fetchMyPosts = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8000/api/v1/post/userpost/all",
+        `${BACKEND_URL}/api/v1/post/userpost/all`,
         { withCredentials: true }
       );
       setPosts(data.posts || []);
@@ -29,7 +31,7 @@ const MyPosts = () => {
 
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/post/delete/${postId}`,
+        `${BACKEND_URL}/api/v1/post/delete/${postId}`,
         { withCredentials: true }
       );
 

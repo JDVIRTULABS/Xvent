@@ -18,7 +18,7 @@ const LoginPage = () => {
   const [input, setInput] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { currentUser, setCurrentUser, UserLoading } = useUser();
   // Handle input change
   const handleChange = (e) => {
@@ -39,7 +39,7 @@ const LoginPage = () => {
     try {
       setLoading(true);
       const { data } = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
+        `${BACKEND_URL}/api/v1/user/login`,
         input,
         {
           headers: { "Content-Type": "application/json" },

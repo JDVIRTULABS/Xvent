@@ -6,6 +6,7 @@ const ProfilePage = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // Deft Avatar
   const defaultAvatar =
     "https://cdn-icons-png.flaticon.com/512/847/847969.png"; 
@@ -14,7 +15,7 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/user/${id}/profile`,
+          `${BACKEND_URL}/api/v1/user/${id}/profile`,
           { withCredentials: true }
         );
         setUser(res.data.user);

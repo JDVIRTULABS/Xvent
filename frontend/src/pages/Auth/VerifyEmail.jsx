@@ -8,12 +8,12 @@ const VerifyEmail = () => {
   const [email, setEmail] = useState(""); // for resending
   const [expired, setExpired] = useState(false);
   const navigate = useNavigate();
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     const verifyEmail = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/user/verify-email/${token}`
+          `${BACKEND_URL}/api/v1/user/verify-email/${token}`
         );
 
         if (res.data.success) {

@@ -11,11 +11,12 @@ const UpdatePost = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     // fetch existing post data
     const fetchPost = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/post/${id}`, {
+        const { data } = await axios.get(`${BACKEND_URL}/api/v1/post/${id}`, {
   withCredentials: true,
 });
 
@@ -37,7 +38,7 @@ const UpdatePost = () => {
 
     try {
       const { data } = await axios.put(
-        `http://localhost:8000/api/v1/post/update/${id}`,
+        `${BACKEND_URL}/api/v1/post/update/${id}`,
         formData,
         {
           withCredentials: true,
