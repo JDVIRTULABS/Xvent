@@ -30,7 +30,18 @@ const corsOption = {
   origin: ["https://www.xvent.in","http://localhost:5173", "http://localhost:5174"], // allow both
   credentials: true, // lowercase + required
 };
+
+
+// Handle preflight OPTIONS requests
+app.options("*", cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+}));
+
 app.use(cors(corsOption));
+
+
 
 // api routes
 
