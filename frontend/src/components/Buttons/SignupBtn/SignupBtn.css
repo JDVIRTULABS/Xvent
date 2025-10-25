@@ -1,0 +1,42 @@
+.singupBtnContainer {
+  height: 53px;
+  width: max-content;
+  min-width: 119px;
+  text-decoration: none;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 27px;
+}
+
+.signupPara {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: max-content;
+  /* color: #111010; */
+  font-weight: normal;
+  font-size: 24px;
+  cursor: pointer;  
+  /* border: 1px solid red; */
+  text-align: center;
+}
+
+
+.blackBtn{
+  background-color: #000000;
+  color: var(--color-bg-color);
+}
+
+.orangeBtn{
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-secondary);
+}
+
+.outlineBtn{
+  background-color: none;
+  border: 2px solid var(--color-btn-secondary);
+  color: var(--color-btn-secondary);
+}

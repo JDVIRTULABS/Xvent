@@ -1,0 +1,33 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+
+.env
+.env.*
+
+# Log files
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Test coverage reports
+coverage/
+
+# Uploaded files (if not managed by a separate service)
+uploads/
+
+# MongoDB specific files (if local DB files are created)
+data/db/
+dump/

@@ -1,0 +1,36 @@
+.HomePageFeatureCardContainer{
+    height: 515px;
+    width: 100%;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 50px 0;
+}
+
+
+.HomePageFeaturesubCards{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    border: 1px solid blue;
+    height: 100%;
+    width: 30%;
+}
+
+.HomePageFeaturesubMainCards{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35%;
+    border: 1px solid red;
+    height: 100%;
+}
+
+.HomePageFeaturesubMainCards img{
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}   

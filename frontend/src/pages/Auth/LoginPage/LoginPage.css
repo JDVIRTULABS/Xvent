@@ -1,0 +1,214 @@
+.LoginMainContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-color);
+  margin: 20px 0;
+}
+
+.LoginPageContainer {
+  padding: 0 40px;
+  width: 558px;
+  height: 854px;
+  border-radius: 32px;
+  border: 1px solid #c7c6c2;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.LoginPageUpperSection {
+  height: 130px;
+  width: 100%;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.LoginPageUpperSection img {
+  height: 59px;
+  width: 32px;
+  /* border: 1px solid blue; */
+  object-fit: contain;
+}
+
+.LoginPageUpperSection h2 {
+  font-family: var(--font-base);
+  font-size: var(--font-size-32);
+  font-weight: 500;
+  max-height: 39px;
+  height: auto;
+  width: 100%;
+  /* border: 1px solid green; */
+  text-align: center;
+}
+
+.LoginPageUpperSection p {
+  font-family: var(--font-base-secondary);
+  font-size: var(--font-size-small);
+  font-weight: normal;
+  color: var(--color-text-secondary);
+  height: 24px;
+  width: 100%;
+  text-align: center;
+}
+
+.signupPageLink {
+  font-family: var(--font-base);
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.loginForm {
+  height: 391px;
+  width: 100%;
+  /* border: 1px solid blue; */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.formGroup {
+  height: 87px;
+  width: 100%;
+  /* border: 1px solid green; */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.formGroup label {
+  font-family: var(--font-base-secondary);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.formGroup input {
+  height: 56px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 102, 102, 35);
+  background-color: var(--color-bg);
+  padding: 0 0.7rem;
+  font-size: var(--font-size-base);
+  font-family: var(--font-base-secondary);
+  font-size: var(--font-size-small);
+  font-weight: normal;
+  color: var(--color-text);
+}
+
+.formForgetPassword {
+  height: 27px;
+  width: 100%;
+  text-align: right;
+  /* border: 1px solid purple; */
+}
+
+.formForgetPassword p {
+  font-family: var(--font-base-secondary);
+  font-size: var(--font-size-small);
+  font-weight: 450;
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+.formOptions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: 8px 0;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 3px;
+  justify-content: center;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-bg-checkbox);
+  border-radius: 4px;
+  position: relative;
+}
+
+.checkmarkPara {
+  font-family: var(--font-base);
+  font-size: var(--font-size-small);
+  font-weight: normal;
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  display: none;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+  display: block;
+}
+
+.loginBtn {
+  height: 64px;
+  width: 100%;
+}
+
+.divider {
+  height: 22px;
+  width: 100%;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.divider p {
+  font-family: var(--font-base);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+}
+
+hr {
+  width: 45%;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+}
+
+.oauthButtons {
+  height: 144px;
+  width: 100%;
+  /* border: 1px solid green; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}

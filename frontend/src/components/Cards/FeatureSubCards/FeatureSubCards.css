@@ -1,0 +1,45 @@
+.featureSubCardContainer{
+    min-height: 211px;
+    min-width: 334px;
+    height: 45%;
+    width: 90%;
+    border: 1px solid green;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.featureSubCardContainer img{
+    height: 20%;
+    width: 100%;
+    border: 1px solid red;
+    object-fit: contain;
+}
+
+.featureSubCardContainer h3{
+    font-family: var(--font-base-third);
+    font-size: var(--space-lg);
+    font-weight: bold;
+    min-height: 42px;
+    height: auto;
+    border: 1px solid red;
+    width: 100%;
+    text-align: center;
+}
+
+.featureSubCardContainer p{
+    font-family: var(--font-base);
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 150%;
+    text-align: center;
+     height: auto;
+    border: 1px solid red;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}

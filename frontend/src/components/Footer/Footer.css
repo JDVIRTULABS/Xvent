@@ -1,0 +1,87 @@
+#FooterContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 138px;
+  width: 100%;
+  background-color: #000000;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-top: 45px;
+  position: fixed;
+  bottom: 0;
+}
+
+.FooterMainLogo {
+  border: 1px solid blue;
+  width: 20%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FooterMainLogo img {
+  height: 59px;
+  width: 121px;
+  object-fit: contain;
+  filter: brightness(100);
+}
+
+.FooterInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  width: 60%;
+  border: 1px solid yellow;
+  height: 100%;
+  gap: 24px;
+}
+
+.FooterLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid orange;
+  height: 100%;
+  width: 20%;
+}
+
+.FooterLinks ul {
+  color: #ffffff;
+  gap: 12px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid red;
+  height: 100%;
+  width: 100%;
+}
+
+.FooterLinks ul li {
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid green; */
+  margin-bottom: 0;
+}
+
+.FooterLinks img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.FooterLinks img:hover {
+  transform: scale(1.1);
+}
+
+.FooterInfoUnderline {
+  text-decoration: underline;
+  color: #ffffff;
+}

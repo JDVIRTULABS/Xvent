@@ -1,0 +1,63 @@
+[
+  {
+    "post_id": "p001",
+    "author": {
+      "user_id": "u101",
+      "name": "Aarav Mehta",
+      "profile_pic": "https://xvent.com/images/users/aarav.jpg"
+    },
+    "timestamp": "2025-08-06T09:30:00Z",
+    "content": "Excited to attend the Hyderabad Tech Fest this weekend! Who else is joining?",
+    "media": [
+      "https://xvent.com/images/posts/htf-banner.jpg"
+    ],
+    "likes_count": 45,
+    "comments_count": 8,
+    "event_link": {
+      "event_id": "e301",
+      "event_name": "Hyderabad Tech Fest",
+      "event_date": "2025-08-10"
+    },
+    "hashtags": ["#HyderabadTechFest", "#TechEvents"]
+  },
+  {
+    "post_id": "p002",
+    "author": {
+      "user_id": "u102",
+      "name": "Riya Sharma",
+      "profile_pic": "https://xvent.com/images/users/riya.jpg"
+    },
+    "timestamp": "2025-08-05T17:15:00Z",
+    "content": "Throwback to last year’s Coke Studio Live. Can’t wait for this year’s lineup!",
+    "media": [
+      "https://xvent.com/images/posts/cokestudio2024.jpg"
+    ],
+    "likes_count": 128,
+    "comments_count": 20,
+    "event_link": {
+      "event_id": "e302",
+      "event_name": "Coke Studio Live",
+      "event_date": "2025-08-25"
+    },
+    "hashtags": ["#CokeStudio", "#LiveMusic"]
+  },
+  {
+    "post_id": "p003",
+    "author": {
+      "user_id": "u103",
+      "name": "Startup Connect Group",
+      "profile_pic": "https://xvent.com/images/groups/startupconnect.jpg"
+    },
+    "timestamp": "2025-08-04T12:00:00Z",
+    "content": "📢 Applications are now open for Startup Pitch Night! Showcase your idea to investors.",
+    "media": [],
+    "likes_count": 67,
+    "comments_count": 14,
+    "event_link": {
+      "event_id": "e303",
+      "event_name": "Startup Pitch Night",
+      "event_date": "2025-08-18"
+    },
+    "hashtags": ["#StartupPitch", "#Entrepreneurship"]
+  }
+]
