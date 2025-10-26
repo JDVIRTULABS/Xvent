@@ -344,12 +344,12 @@ export const login = async (req, res) => {
     };
 
     const isProd = process.env.NODE_ENV === "production";
-
-    return res
+    res
       .cookie("token", token, {
         httpOnly: true,
-        secure: isProd, // true only on HTTPS
-        sameSite: isProd ? "None" : "Lax", // Lax for dev
+        secure: isProd, // HTTPS only in prod
+        sameSite: isProd ? "None" : "Lax",
+        domain: isProd ? ".xvent.in" :undefined, // important for prod subdomains
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .status(200)
@@ -371,9 +371,13 @@ export const login = async (req, res) => {
 
 export const logout = async (_, res) => {
   try {
-    return res.cookie("token", "", { maxAge: 0 }).json({
-      message: "Logged out successfully",
-      success: true,
+    const isProd = process.env.NODE_ENV === "production";
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "None" : "Lax",
+      domain: isProd ? ".xvent.in" : undefined,
+      maxAge: 0,
     });
   } catch (error) {
     console.log(error);
