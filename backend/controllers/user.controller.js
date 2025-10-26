@@ -8,7 +8,6 @@ import { Event } from "../models/event.model.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
-
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("_id username email profilePicture");
@@ -26,7 +25,6 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
-
 
 //  Adding AUTU(google auth)
 
@@ -153,8 +151,6 @@ export const register = async (req, res) => {
   }
 };
 
-
-
 export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
@@ -201,22 +197,27 @@ export const verifyEmail = async (req, res) => {
     });
   }
 };
- 
 
 export const resendVerificationEmail = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ message: "Email is required", success: false });
+      return res
+        .status(400)
+        .json({ message: "Email is required", success: false });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found", success: false });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
 
     if (user.verified) {
-      return res.status(200).json({ message: "Email already verified", success: true });
+      return res
+        .status(200)
+        .json({ message: "Email already verified", success: true });
     }
 
     // Generate new verification token
@@ -278,7 +279,6 @@ export const resendVerificationEmail = async (req, res) => {
   }
 };
 
-
 //  Done auth
 
 export const login = async (req, res) => {
@@ -322,8 +322,14 @@ export const login = async (req, res) => {
     });
 
     // Populate posts and events (only existing)
-    const posts = await Post.find({ _id: { $in: user.posts }, author: user._id });
-    const events = await Event.find({ _id: { $in: user.events }, author: user._id });
+    const posts = await Post.find({
+      _id: { $in: user.posts },
+      author: user._id,
+    });
+    const events = await Event.find({
+      _id: { $in: user.events },
+      author: user._id,
+    });
 
     const userData = {
       _id: user._id,
@@ -340,17 +346,16 @@ export const login = async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "strict",
-        maxAge: 1 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // optional: 7 days
       })
       .status(200)
       .json({
         message: `Welcome back ${user.username}`,
         success: true,
         user: userData,
-        token,
       });
-
   } catch (error) {
     console.error("Login Error:", error);
     return res.status(500).json({
@@ -360,8 +365,7 @@ export const login = async (req, res) => {
   }
 };
 
-
-// REMOVE TOKEN (pending) 
+// REMOVE TOKEN (pending)
 
 export const logout = async (_, res) => {
   try {
@@ -374,9 +378,7 @@ export const logout = async (_, res) => {
   }
 };
 
-
-
-// Search USER using INDEXING not Ref 
+// Search USER using INDEXING not Ref
 
 export const getProfile = async (req, res) => {
   try {
@@ -453,7 +455,6 @@ export const getMyProfile = async (req, res) => {
   }
 };
 
-
 export const editProfile = async (req, res) => {
   try {
     const userId = req.id;
@@ -489,9 +490,7 @@ export const editProfile = async (req, res) => {
   }
 };
 
-
 // Mutual following (V2)
-
 
 export const getSuggestedUsers = async (req, res) => {
   try {
@@ -582,10 +581,16 @@ export const bookmarks = async (req, res) => {
     const eventId = req.params.postId; // better rename to eventId for clarity
 
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
 
     const event = await Event.findById(eventId);
-    if (!event) return res.status(404).json({ success: false, message: "Event not found" });
+    if (!event)
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
 
     // Toggle bookmark
     const isBookmarked = user.bookmarks.includes(eventId);
@@ -604,12 +609,13 @@ export const bookmarks = async (req, res) => {
   }
 };
 
-
-
 export const getBookmarks = async (req, res) => {
   try {
     const user = await User.findById(req.id).populate("bookmarks");
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
 
     return res.status(200).json({
       success: true,
@@ -621,12 +627,13 @@ export const getBookmarks = async (req, res) => {
   }
 };
 
-
-
 export const getFollowing = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("following");
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     res.json({ success: true, following: user.following });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server error" });
