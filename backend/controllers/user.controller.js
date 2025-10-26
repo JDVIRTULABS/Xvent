@@ -294,14 +294,15 @@ export const login = async (req, res) => {
 
     const isProd = process.env.NODE_ENV === "production";
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: isProd,               // HTTPS only in prod
-      sameSite: isProd ? "None" : "Lax",
-      domain: isProd ? ".xvent.in" : undefined, // important for subdomains
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,           // only HTTPS
+  sameSite: "None",       // allow cross-site
+  domain: ".xvent.in",    // allow subdomains
+  path: "/",
+  maxAge: 7*24*60*60*1000
+});
+
 
     return res.status(200).json({
       message: `Welcome back ${user.username}`,
