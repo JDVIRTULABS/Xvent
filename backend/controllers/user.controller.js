@@ -351,7 +351,7 @@ export const login = async (req, res) => {
         sameSite: isProd ? "None" : "Lax",
         domain: isProd ? ".xvent.in" :undefined, // important for prod subdomains
         path: "/",  
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
       })
       .status(200)
       .json({
