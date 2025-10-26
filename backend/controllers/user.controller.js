@@ -350,6 +350,7 @@ export const login = async (req, res) => {
         secure: isProd, // HTTPS only in prod
         sameSite: isProd ? "None" : "Lax",
         domain: isProd ? ".xvent.in" :undefined, // important for prod subdomains
+        path: "/",  
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .status(200)
@@ -377,7 +378,6 @@ export const logout = async (_, res) => {
       secure: isProd,
       sameSite: isProd ? "None" : "Lax",
       domain: isProd ? ".xvent.in" : undefined,
-      path: "/",  
       maxAge: 0,
     });
   } catch (error) {
