@@ -334,7 +334,7 @@ export const logout = async (_, res) => {
       httpOnly: true,
       secure: isProd,
       sameSite: isProd ? "None" : "Lax",
-      domain: isProd ? ".xvent.in" : undefined,
+      domain: isProd ? "xvent.in" : undefined,
       maxAge: 0,
     });
   } catch (error) {
