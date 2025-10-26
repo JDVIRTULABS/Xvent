@@ -284,87 +284,38 @@ export const resendVerificationEmail = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        message: "Email and password are required",
-        success: false,
-      });
-    }
-
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({
-        message: "Incorrect email or password",
-        success: false,
-      });
-    }
-
-    // If user signed up via Google, they may not have a password
-    if (!user.password) {
-      return res.status(401).json({
-        message: "Please login with Google",
-        success: false,
-      });
-    }
+    if (!user) return res.status(401).json({ message: "Invalid credentials", success: false });
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res.status(401).json({
-        message: "Incorrect email or password",
-        success: false,
-      });
-    }
+    if (!isPasswordMatch) return res.status(401).json({ message: "Invalid credentials", success: false });
 
-    // Create JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
-    });
-
-    // Populate posts and events (only existing)
-    const posts = await Post.find({
-      _id: { $in: user.posts },
-      author: user._id,
-    });
-    const events = await Event.find({
-      _id: { $in: user.events },
-      author: user._id,
-    });
-
-    const userData = {
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      profilePicture: user.profilePicture,
-      bio: user.bio,
-      followers: user.followers,
-      following: user.following,
-      posts,
-      events,
-    };
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "1d" });
 
     const isProd = process.env.NODE_ENV === "production";
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: isProd, // HTTPS only in prod
-        sameSite: isProd ? "None" : "Lax",
-        domain: isProd ? ".xvent.in" :undefined, // important for prod subdomains
-        path: "/",  
-        maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
-      })
-      .status(200)
-      .json({
-        message: `Welcome back ${user.username}`,
-        success: true,
-        user: userData,
-      });
-  } catch (error) {
-    console.error("Login Error:", error);
-    return res.status(500).json({
-      message: "Server error. Please try again later.",
-      success: false,
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: isProd,               // HTTPS only in prod
+      sameSite: isProd ? "None" : "Lax",
+      domain: isProd ? ".xvent.in" : undefined, // important for subdomains
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+    return res.status(200).json({
+      message: `Welcome back ${user.username}`,
+      success: true,
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error", success: false });
   }
 };
 
