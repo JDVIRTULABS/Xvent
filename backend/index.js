@@ -26,20 +26,18 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like curl/Postman)
+      // Allow requests with no origin (like Postman)
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // ✅ This sets Access-Control-Allow-Origin automatically
+        callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow cookies/auth headers
+    credentials: true, // allow cookies
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-
 
 // ✅ Body parsers
 app.use(express.json());
