@@ -1,6 +1,14 @@
 import jwt from "jsonwebtoken";
 
 const isAuthenticated = async (req, res, next) => {
+  // ✅ Set CORS headers for all responses, including errors
+  res.header("Access-Control-Allow-Origin", "https://www.xvent.in");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
   try {
     const token = req.cookies?.token;
     if (!token) {
@@ -18,7 +26,6 @@ const isAuthenticated = async (req, res, next) => {
       });
     }
 
-    // Make sure this matches your JWT payload
     req.id = decode.userId || decode.id;
     if (!req.id) {
       return res.status(401).json({
