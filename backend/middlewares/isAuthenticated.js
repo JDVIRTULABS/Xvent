@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const isAuthenticated = async (req, res, next) => {
   // ✅ Set CORS headers for all responses, including errors
-  res.header("Access-Control-Allow-Origin", "https://www.xvent.in");
+  res.header("Access-Control-Allow-Origin", "https://www.xvent.in","https://xvent.in","http://localhost:5173");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
