@@ -38,7 +38,11 @@ app.use(cors({
 }));
 
 // ✅ Handle preflight requests globally
-app.options('*', cors());
+app.options('*', cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 
 // ✅ Body parsers
 app.use(express.json({ limit: '10mb' }));
