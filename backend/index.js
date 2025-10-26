@@ -17,32 +17,47 @@ connectDB();
 // ✅ Allowed frontend origins
 const allowedOrigins = [
   "https://www.xvent.in",
-  "https://xvent.in",
+  "https://xvent.in", 
   "http://localhost:5173",
   "http://localhost:5174",
 ];
 
-// ✅ CORS middleware
+// ✅ Enhanced CORS middleware
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman)
+      console.log('🔍 CORS Check - Origin:', origin);
+      
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
+        console.log('✅ CORS: Origin allowed');
+        callback(null, origin);
       } else {
+        console.log('❌ CORS: Origin blocked');
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // allow cookies
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+
+// ✅ Handle preflight requests explicitly
+// app.options('*', cors());
 
 // ✅ Body parsers
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
+
+// ✅ Test CORS route
+app.get("/api/v1/test-cors", (req, res) => {
+  res.json({ 
+    success: true, 
+    message: "CORS test successful",
+    origin: req.headers.origin
+  });
+});
 
 // ✅ Routes
 app.use("/api/v1/user", userRoute);
@@ -57,9 +72,12 @@ app.get("/", (req, res) => {
 // ✅ Global CORS error handler
 app.use((err, req, res, next) => {
   if (err.message === "Not allowed by CORS") {
-    return res
-      .status(403)
-      .json({ success: false, message: "CORS blocked: Origin not allowed" });
+    console.log('🚫 CORS Error:', err.message);
+    return res.status(403).json({ 
+      success: false, 
+      message: "CORS blocked: Origin not allowed",
+      allowedOrigins: allowedOrigins 
+    });
   }
   next(err);
 });
