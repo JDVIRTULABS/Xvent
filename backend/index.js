@@ -11,10 +11,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Connect to database
 connectDB();
 
-// ✅ Allowed frontend origins
+// ✅ Define allowed origins (NO trailing slash)
 const allowedOrigins = [
   "https://www.xvent.in",
   "https://xvent.in",
@@ -22,31 +21,32 @@ const allowedOrigins = [
   "http://localhost:5174",
 ];
 
-// ✅ ENHANCED CORS middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, Postman, curl)
-      if (!origin) return callback(null, true);
+// ✅ Use CORS safely
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // allow cookies
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-    exposedHeaders: ["Set-Cookie"],
-    optionsSuccessStatus: 200,
-  })
-);
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
 
-// ✅ Handle preflight OPTIONS requests globally
-app.options(/.*/, cors({ origin: allowedOrigins, credentials: true, }));
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With, Accept"
+  );
 
-// ✅ Body parsers
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+// ✅ Other middlewares
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
@@ -56,23 +56,17 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/event", eventRoute);
 
-// ✅ Test endpoint to verify CORS
+// ✅ Test route
 app.get("/api/v1/test-cors", (req, res) => {
   res.json({
     success: true,
-    message: "CORS is working!",
     origin: req.headers.origin,
-    timestamp: new Date().toISOString(),
+    cookies: req.cookies,
   });
-});
-
-// ✅ Root endpoint
-app.get("/", (req, res) => {
-  res.json({ success: true, message: "Server running ✅" });
 });
 
 // ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`Allowed CORS origins: ${allowedOrigins.join(", ")}`);
+  console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
 });
