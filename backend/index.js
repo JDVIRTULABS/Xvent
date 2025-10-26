@@ -2,6 +2,10 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import connectDB from "./utils/db.js";
+import userRoute from "./routes/user.route.js"
+import postRoute from "./routes/post.route.js"
+import eventRoute from "./routes/event.route.js"
 
 dotenv.config();
 const app = express();
@@ -38,10 +42,11 @@ app.use(cors({
 }));
 
 // ✅ Handle preflight requests globally
-app.options('*', cors({
+app.options(/.*/, cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true,
 }));
+
 
 
 // ✅ Body parsers
