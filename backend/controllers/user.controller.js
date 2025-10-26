@@ -285,24 +285,29 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid credentials", success: false });
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials", success: false });
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) return res.status(401).json({ message: "Invalid credentials", success: false });
+    if (!isPasswordMatch)
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials", success: false });
 
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "1d" });
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "1d",
+    });
 
-    const isProd = process.env.NODE_ENV === "production";
-
-   res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,           // only HTTPS
-  sameSite: "None",       // allow cross-site
-  domain: ".xvent.in",    // allow subdomains
-  path: "/",
-  maxAge: 7*24*60*60*1000
-});
-
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS only
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      domain: process.env.NODE_ENV === "production" ? ".xvent.in" : undefined,
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
     return res.status(200).json({
       message: `Welcome back ${user.username}`,

@@ -3,9 +3,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
-import userRoute from "./routes/user.route.js"
-import postRoute from "./routes/post.route.js"
-import eventRoute from "./routes/event.route.js"
+import userRoute from "./routes/user.route.js";
+import postRoute from "./routes/post.route.js";
+import eventRoute from "./routes/event.route.js";
 
 dotenv.config();
 const app = express();
@@ -23,34 +23,31 @@ const allowedOrigins = [
 ];
 
 // ✅ ENHANCED CORS middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman, etc.)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  exposedHeaders: ['Set-Cookie'],
-  optionsSuccessStatus: 200
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, Postman, curl)
+      if (!origin) return callback(null, true);
 
-// ✅ Handle preflight requests globally
-app.options(/.*/, cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    exposedHeaders: ["Set-Cookie"],
+    optionsSuccessStatus: 200,
+  })
+);
 
-
+// ✅ Handle preflight OPTIONS requests globally
+app.options(/.*/, cors({ origin: allowedOrigins, credentials: true, }));
 
 // ✅ Body parsers
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
@@ -61,11 +58,11 @@ app.use("/api/v1/event", eventRoute);
 
 // ✅ Test endpoint to verify CORS
 app.get("/api/v1/test-cors", (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: "CORS is working!",
     origin: req.headers.origin,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -75,4 +72,7 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Start server
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Allowed CORS origins: ${allowedOrigins.join(", ")}`);
+});
